@@ -2173,7 +2173,7 @@ OTLPConfig
 <td>
 <em>(Optional)</em>
 <p>Settings related to the OTLP receiver feature.
-It requires Prometheus &gt;= v2.54.0.</p>
+It requires Prometheus &gt;= v2.55.0.</p>
 </td>
 </tr>
 <tr>
@@ -2679,7 +2679,8 @@ bool
 <p>Make sure to understand the security implications if you want to enable
 it (<a href="https://kubernetes.io/docs/concepts/configuration/overview/">https://kubernetes.io/docs/concepts/configuration/overview/</a>).</p>
 <p>When hostNetwork is enabled, this will set the DNS policy to
-<code>ClusterFirstWithHostNet</code> automatically.</p>
+<code>ClusterFirstWithHostNet</code> automatically (unless <code>.spec.DNSPolicy</code> is set
+to a different value).</p>
 </td>
 </tr>
 <tr>
@@ -7036,7 +7037,7 @@ OTLPConfig
 <td>
 <em>(Optional)</em>
 <p>Settings related to the OTLP receiver feature.
-It requires Prometheus &gt;= v2.54.0.</p>
+It requires Prometheus &gt;= v2.55.0.</p>
 </td>
 </tr>
 <tr>
@@ -7542,7 +7543,8 @@ bool
 <p>Make sure to understand the security implications if you want to enable
 it (<a href="https://kubernetes.io/docs/concepts/configuration/overview/">https://kubernetes.io/docs/concepts/configuration/overview/</a>).</p>
 <p>When hostNetwork is enabled, this will set the DNS policy to
-<code>ClusterFirstWithHostNet</code> automatically.</p>
+<code>ClusterFirstWithHostNet</code> automatically (unless <code>.spec.DNSPolicy</code> is set
+to a different value).</p>
 </td>
 </tr>
 <tr>
@@ -8120,6 +8122,34 @@ be ignored. A null or empty list means only match against labelSelector.</p>
 <div>
 <p>DNSPolicy specifies the DNS policy for the pod.</p>
 </div>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr><td><p>&#34;ClusterFirst&#34;</p></td>
+<td><p>DNSClusterFirst indicates that the pod should use cluster DNS
+first unless hostNetwork is true, if it is available, then
+fall back on the default (as determined by kubelet) DNS settings.</p>
+</td>
+</tr><tr><td><p>&#34;ClusterFirstWithHostNet&#34;</p></td>
+<td><p>DNSClusterFirstWithHostNet indicates that the pod should use cluster DNS
+first, if it is available, then fall back on the default
+(as determined by kubelet) DNS settings.</p>
+</td>
+</tr><tr><td><p>&#34;Default&#34;</p></td>
+<td><p>DNSDefault indicates that the pod should use the default (as
+determined by kubelet) DNS settings.</p>
+</td>
+</tr><tr><td><p>&#34;None&#34;</p></td>
+<td><p>DNSNone indicates that the pod should use empty DNS settings. DNS
+parameters such as nameservers and search paths should be defined via
+DNSConfig.</p>
+</td>
+</tr></tbody>
+</table>
 <h3 id="monitoring.coreos.com/v1.Duration">Duration
 (<code>string</code> alias)</h3>
 <p>
@@ -11537,7 +11567,7 @@ OTLPConfig
 <td>
 <em>(Optional)</em>
 <p>Settings related to the OTLP receiver feature.
-It requires Prometheus &gt;= v2.54.0.</p>
+It requires Prometheus &gt;= v2.55.0.</p>
 </td>
 </tr>
 <tr>
@@ -12043,7 +12073,8 @@ bool
 <p>Make sure to understand the security implications if you want to enable
 it (<a href="https://kubernetes.io/docs/concepts/configuration/overview/">https://kubernetes.io/docs/concepts/configuration/overview/</a>).</p>
 <p>When hostNetwork is enabled, this will set the DNS policy to
-<code>ClusterFirstWithHostNet</code> automatically.</p>
+<code>ClusterFirstWithHostNet</code> automatically (unless <code>.spec.DNSPolicy</code> is set
+to a different value).</p>
 </td>
 </tr>
 <tr>
@@ -17967,7 +17998,7 @@ OTLPConfig
 <td>
 <em>(Optional)</em>
 <p>Settings related to the OTLP receiver feature.
-It requires Prometheus &gt;= v2.54.0.</p>
+It requires Prometheus &gt;= v2.55.0.</p>
 </td>
 </tr>
 <tr>
@@ -18473,7 +18504,8 @@ bool
 <p>Make sure to understand the security implications if you want to enable
 it (<a href="https://kubernetes.io/docs/concepts/configuration/overview/">https://kubernetes.io/docs/concepts/configuration/overview/</a>).</p>
 <p>When hostNetwork is enabled, this will set the DNS policy to
-<code>ClusterFirstWithHostNet</code> automatically.</p>
+<code>ClusterFirstWithHostNet</code> automatically (unless <code>.spec.DNSPolicy</code> is set
+to a different value).</p>
 </td>
 </tr>
 <tr>
@@ -25720,7 +25752,7 @@ OTLPConfig
 <td>
 <em>(Optional)</em>
 <p>Settings related to the OTLP receiver feature.
-It requires Prometheus &gt;= v2.54.0.</p>
+It requires Prometheus &gt;= v2.55.0.</p>
 </td>
 </tr>
 <tr>
@@ -26226,7 +26258,8 @@ bool
 <p>Make sure to understand the security implications if you want to enable
 it (<a href="https://kubernetes.io/docs/concepts/configuration/overview/">https://kubernetes.io/docs/concepts/configuration/overview/</a>).</p>
 <p>When hostNetwork is enabled, this will set the DNS policy to
-<code>ClusterFirstWithHostNet</code> automatically.</p>
+<code>ClusterFirstWithHostNet</code> automatically (unless <code>.spec.DNSPolicy</code> is set
+to a different value).</p>
 </td>
 </tr>
 <tr>
@@ -28922,7 +28955,6 @@ See <a href="https://prometheus.io/docs/prometheus/latest/configuration/configur
 </em>
 </td>
 <td>
-<em>(Optional)</em>
 <p>List of targets for this static configuration.</p>
 </td>
 </tr>
@@ -28946,7 +28978,8 @@ map[string]string
 (<em>Appears on:</em><a href="#monitoring.coreos.com/v1alpha1.StaticConfig">StaticConfig</a>)
 </p>
 <div>
-<p>Target represents a target for Prometheus to scrape</p>
+<p>Target represents a target for Prometheus to scrape
+kubebuilder:validation:MinLength:=1</p>
 </div>
 <h3 id="monitoring.coreos.com/v1alpha1.TelegramConfig">TelegramConfig
 </h3>
