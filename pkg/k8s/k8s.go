@@ -17,7 +17,6 @@ package k8s
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"net/url"
 	"os"
 	"strings"
@@ -198,20 +197,6 @@ func IsAllowed(
 	return len(missingPermissions) == 0, missingPermissions, nil
 }
 
-// TODO: replace by apierrors.IsNotFound()?
-func IsResourceNotFoundError(err error) bool {
-	se, ok := err.(*apierrors.StatusError)
-	if !ok {
-		return false
-	}
-
-	if se.Status().Code == http.StatusNotFound && se.Status().Reason == metav1.StatusReasonNotFound {
-		return true
-	}
-
-	return false
-}
-
 // UpdateDaemonSet merges metadata of existing DaemonSet with new one and updates it.
 func UpdateDaemonSet(ctx context.Context, dmsClient clientappsv1.DaemonSetInterface, dset *appsv1.DaemonSet) error {
 	// As stated in the RetryOnConflict's documentation, the returned error shouldn't be wrapped.
@@ -282,7 +267,7 @@ func CreateOrUpdateConfigMap(ctx context.Context, cmClient clientv1.ConfigMapInt
 func IsAPIGroupVersionResourceSupported(discoveryCli discovery.DiscoveryInterface, groupVersion schema.GroupVersion, resource string) (bool, error) {
 	apiResourceList, err := discoveryCli.ServerResourcesForGroupVersion(groupVersion.String())
 	if err != nil {
-		if IsResourceNotFoundError(err) {
+		if apierrors.IsNotFound(err) {
 			return false, nil
 		}
 
